@@ -12,6 +12,7 @@ Route::prefix('v1/')->group(function () {
         Route::post('', 'store');
         Route::put('{id}', 'update');
         Route::get('{id}', 'show');
+        Route::delete('{id}', 'delete');
     });
 
 });

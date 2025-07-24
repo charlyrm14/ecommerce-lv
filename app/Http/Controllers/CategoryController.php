@@ -161,4 +161,33 @@ class CategoryController extends Controller
             return response()->json(["error" => 'Internal server error'], 500);
         }
     }
+
+    /**
+     * Delete a category by id
+     *
+     * @param int $id The ID of the category to be deleted.
+     *
+     *  @return \Illuminate\Http\JsonResponse A JSON response with a message successfully category deleted (200)
+     * or an error response: 404 if not found or 500 on server error.
+     *
+     */
+    public function delete(int $id): JsonResponse
+    {
+        try {
+
+            $category = Category::with('parent')->byId($id)->first();
+            
+            if (!$category) {
+                return response()->json(['message' => 'Resource not found'], 404);
+            }
+
+            $category->delete();
+
+            return response()->json(['message' => 'Category deleted successfully'], 200);
+
+        } catch (\Throwable $e) {
+            Log::error("Delete category error: " . $e->getMessage());
+            return response()->json(["error" => 'Internal server error'], 500);
+        }
+    }
 }
