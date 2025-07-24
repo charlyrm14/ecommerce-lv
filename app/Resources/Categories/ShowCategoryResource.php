@@ -7,7 +7,7 @@ namespace App\Resources\Categories;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class UpdateCategoryResource extends JsonResource {
+class ShowCategoryResource extends JsonResource {
 
     public function toArray($category)
     {

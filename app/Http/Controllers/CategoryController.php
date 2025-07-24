@@ -12,6 +12,7 @@ use App\Http\Requests\{
 };
 use App\Resources\Categories\{
     NewCategoryResource,
+    ShowCategoryResource,
     UpdateCategoryResource
 };
 use App\Services\CategoryService;
@@ -100,7 +101,7 @@ class CategoryController extends Controller
      *
      * @throws \Illuminate\Http\Exceptions\HttpResponseException If validation rules are violated.
      */
-    public function update(CategoryUpdateRequest $request, int $id)
+    public function update(CategoryUpdateRequest $request, int $id): JsonResponse
     {
         try {
             
@@ -128,6 +129,35 @@ class CategoryController extends Controller
 
         } catch (\Throwable $e) {
             Log::error("Update category error: " . $e->getMessage());
+            return response()->json(["error" => 'Internal server error'], 500);
+        }
+    }
+
+    /**
+     * Display a detail of a category by id
+     *
+     * @param int $id The ID of the category to be displayed.
+     *
+     *  @return \Illuminate\Http\JsonResponse A JSON response with the category resource (200)
+     * or an error response: 404 if not found or 500 on server error.
+     *
+     */
+    public function show(int $id): JsonResponse
+    {
+        try {
+
+            $category = Category::with('parent')->byId($id)->first();
+        
+            if (!$category) {
+                return response()->json(['message' => 'Resource not found'], 404);
+            }
+
+            return response()->json([
+                'data' => new ShowCategoryResource($category)
+            ], 200);
+
+        } catch (\Throwable $e) {
+            Log::error("Show detail category error: " . $e->getMessage());
             return response()->json(["error" => 'Internal server error'], 500);
         }
     }
