@@ -105,6 +105,16 @@ class Category extends Model
         return $this->children()->with('childrenRecursive');
     }
 
+    /**
+     * The scopeById function filters a query by the specified id value.
+     *
+     * @param Builder query The `` parameter is an instance of the
+     * `Illuminate\Database\Eloquent\Builder` class, which is used for building database queries in
+     * Laravel's Eloquent ORM.
+     * @param int id The `id` parameter in the `scopeById` function is an integer value that is used to
+     * filter the query results based on the `id` column in the database table. The function will
+     * modify the query to only include records where the `id` column matches the provided `id` value.
+     */
     public function scopeById(Builder $query, int $id): void
     {
         $query->where('id', $id);
