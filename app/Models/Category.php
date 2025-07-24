@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -102,5 +103,10 @@ class Category extends Model
     public function childrenRecursive(): HasMany
     {
         return $this->children()->with('childrenRecursive');
+    }
+
+    public function scopeById(Builder $query, int $id): void
+    {
+        $query->where('id', $id);
     }
 }

@@ -7,11 +7,17 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Http\Requests\{
     CategoryIndexRequest,
-    CategoryStoreRequest
+    CategoryStoreRequest,
+    CategoryUpdateRequest
 };
-use App\Resources\Categories\NewCategoryResource;
+use App\Resources\Categories\{
+    NewCategoryResource,
+    UpdateCategoryResource
+};
+use App\Services\CategoryService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class CategoryController extends Controller
 {
@@ -74,6 +80,54 @@ class CategoryController extends Controller
             
         } catch (\Throwable $e) {
             Log::error("Create category error: " . $e->getMessage());
+            return response()->json(["error" => 'Internal server error'], 500);
+        }
+    }
+
+    /**
+     * Update an existing category.
+     *
+     * Receives a validated request containing the updated category data,
+     * performs business logic validations (such as ensuring a category
+     * does not belong to itself or to invalid parent categories), updates
+     * the category, loads its parent relationship, and returns a JSON resource.
+     *
+     * @param \App\Http\Requests\CategoryUpdateRequest $request The validated request with update data.
+     * @param int $id The ID of the category to be updated.
+     *
+     * @return \Illuminate\Http\JsonResponse A JSON response with the updated category resource (200),
+     * or an error response: 404 if not found, 422 if validation fails, or 500 on server error.
+     *
+     * @throws \Illuminate\Http\Exceptions\HttpResponseException If validation rules are violated.
+     */
+    public function update(CategoryUpdateRequest $request, int $id)
+    {
+        try {
+            
+            $category = Category::byId($id)->first();
+        
+            if (!$category) {
+                return response()->json(['message' => 'Not found'], 404);
+            }
+
+            CategoryService::validateNotSelfParent($category->id, $request->parent_id);
+            CategoryService::validateMainCategoryNotAssignedToMain($category->parent_id, $request->parent_id);
+            CategoryService::validateParentIsNotSubcategory($request->parent_id);
+
+            $category->update($request->validated());
+            $category->load('parent');
+
+            return response()->json([
+                'data' => new UpdateCategoryResource($category)
+            ], 200);
+
+        } catch (HttpResponseException $e) {
+
+            Log::error("Update category validation error: " . $e->getMessage());
+            throw $e;
+
+        } catch (\Throwable $e) {
+            Log::error("Update category error: " . $e->getMessage());
             return response()->json(["error" => 'Internal server error'], 500);
         }
     }
