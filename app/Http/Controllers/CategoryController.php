@@ -146,7 +146,7 @@ class CategoryController extends Controller
     {
         try {
 
-            $category = Category::with('parent')->byId($id)->first();
+            $category = Category::with(['parent', 'childrenRecursive'])->byId($id)->first();
         
             if (!$category) {
                 return response()->json(['message' => 'Resource not found'], 404);

@@ -22,6 +22,7 @@ class ShowCategoryResource extends JsonResource {
             'parent' => $this->whenLoaded('parent', function () {
                 return new self($this->parent);
             }),
+            'children' => $this->whenLoaded('childrenRecursive')
         ];
     }
 }
