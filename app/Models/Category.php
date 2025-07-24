@@ -1,9 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
@@ -42,5 +46,38 @@ class Category extends Model
 
             $category->save();
         });
+    }
+
+    /**
+     * The function parent() returns a belongsTo relationship with the Category model
+     * in PHP.
+     *
+     * @return belongsTo A belongsTo relationship is being returned.
+     */
+    public function parent(): BelongsTo
+    {
+        return $this->belongsTo(Category::class, 'parent_id');
+    }
+
+    /**
+     * The function children() returns a HasMany relationship with the Category model
+     * in PHP.
+     *
+     * @return HasMany A HasMany relationship is being returned.
+     */
+    public function children(): HasMany
+    {
+        return $this->hasMany(Category::class, 'parent_id');
+    }
+
+    /**
+     * The function childrenRecursive() return a recursive relationship with the Category model
+     * in PHP
+     *
+     * @return HasMany A HasMany relationship is being returned.
+     */
+    public function childrenRecursive(): HasMany
+    {
+        return $this->children()->with('childrenRecursive');
     }
 }
