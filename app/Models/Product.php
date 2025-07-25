@@ -3,11 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Str;
 
-class Brand extends Model
+class Product extends Model
 {
     use SoftDeletes;
 
@@ -20,7 +19,13 @@ class Brand extends Model
         'name',
         'slug',
         'description',
-        'status'
+        'price',
+        'stock',
+        'sku',
+        'status',
+        'category_id',
+        'brand_id',
+        'uuid'
     ];
 
     /**
@@ -46,33 +51,24 @@ class Brand extends Model
     }
 
     /**
-     * The "booted" method of the model.
+     * The function brand() returns a belongsTo relationship with the Brand model
+     * in PHP.
+     *
+     * @return belongsTo A belongsTo relationship is being returned.
      */
-    protected static function booted(): void
+    public function brand(): BelongsTo
     {
-        static::created(function (Brand $brand) {
-
-            $slug = Str::slug($brand->name);
-            $exists = Brand::where('slug', $slug)->exists();
-
-            if (!$exists) {
-                $brand->slug = $slug;
-            } else {
-                $brand->slug = "{$slug}-{$brand->id}";
-            }
-
-            $brand->save();
-        });
+        return $this->belongsTo(Brand::class);
     }
 
     /**
-     * The function products() returns a HasMany relationship with the Product model
+     * The function category() returns a belongsTo relationship with the Category model
      * in PHP.
      *
-     * @return HasMany A HasMany relationship is being returned.
+     * @return belongsTo A belongsTo relationship is being returned.
      */
-    public function products(): HasMany
+    public function category(): BelongsTo
     {
-        return $this->hasMany(Product::class);
+        return $this->belongsTo(Category::class);
     }
 }

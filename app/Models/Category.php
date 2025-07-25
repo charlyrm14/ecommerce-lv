@@ -106,6 +106,17 @@ class Category extends Model
     }
 
     /**
+     * The function products() returns a HasMany relationship with the Product model
+     * in PHP.
+     *
+     * @return HasMany A HasMany relationship is being returned.
+     */
+    public function products(): HasMany
+    {
+        return $this->hasMany(Product::class);
+    }
+
+    /**
      * The scopeById function filters a query by the specified id value.
      *
      * @param Builder query The `` parameter is an instance of the
