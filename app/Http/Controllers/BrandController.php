@@ -11,6 +11,7 @@ use App\Http\Requests\{
 };
 use App\Models\Brand;
 use App\Resources\Brands\NewBrandResource;
+use App\Resources\Brands\ShowBrandResource;
 use App\Resources\Brands\UpdateBrandResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
@@ -107,6 +108,37 @@ class BrandController extends Controller
 
         } catch (\Throwable $e) {
             Log::error("Brand update error: " . $e->getMessage());
+            return response()->json(["error" => 'Internal server error'], 500);
+        }
+    }
+
+    /**
+     * Display a detail of a brand by id
+     *
+     * The brand, loads their relationship with products and category that belongs to a product, and returns a JSON resource.
+     *
+     * @param int $id The ID of the brand to be displayed.
+     *
+     *  @return \Illuminate\Http\JsonResponse A JSON response with the category resource (200)
+     * or an error response: 404 if not found or 500 on server error.
+     *
+     */
+    public function show(int $id): JsonResponse
+    {
+        try {
+
+            $brand = Brand::byId($id)->with('products.category')->first();
+            
+            if (!$brand) {
+                return response()->json(['message' => 'Resource not found'], 404);
+            }
+
+            return response()->json([
+                'data' => new ShowBrandResource($brand)
+            ], 200);
+
+        } catch (\Throwable $e) {
+            Log::error("Brand detail error: " . $e->getMessage());
             return response()->json(["error" => 'Internal server error'], 500);
         }
     }
