@@ -134,9 +134,9 @@ class CategoryController extends Controller
     }
 
     /**
-     * Display a detail of a category by id
+     * Display a detail of a category by slug
      *
-     * @param int $id The ID of the category to be displayed.
+     * @param string $slug The slug of the category to be displayed.
      *
      *  @return \Illuminate\Http\JsonResponse A JSON response with the category resource (200)
      * or an error response: 404 if not found or 500 on server error.

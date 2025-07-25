@@ -90,4 +90,18 @@ class Brand extends Model
     {
         $query->where('id', $id);
     }
+
+    /**
+     * The scopeBySlug function filters a query by a specific ID value.
+     *
+     * @param Builder query The `` parameter is an instance of the
+     * `Illuminate\Database\Eloquent\Builder` class, which is used for building database queries in
+     * Laravel's Eloquent ORM.
+     * @param int id The "id" parameter is an integer value that is used to filter the query results
+     * based on the specified ID.
+     */
+    public function scopeBySlug(Builder $query, string $slug): void
+    {
+        $query->where('slug', $slug);
+    }
 }
