@@ -9,6 +9,7 @@ use App\Http\Requests\{
 };
 use App\Models\Product;
 use App\Resources\Products\NewProductResource;
+use App\Resources\Products\ShowProductResource;
 use App\Resources\Products\UpdateProductResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
@@ -115,6 +116,37 @@ class ProductController extends Controller
             
         }  catch (\Throwable $e) {
             Log::error("Product update error: " . $e->getMessage());
+            return response()->json(["error" => 'Internal server error'], 500);
+        }
+    }
+
+    /**
+     * Display a detail of a product by id
+     *
+     * The product, loads their relationship with categories and brands that belongs to a product, and returns a JSON resource.
+     *
+     * @param int $id The ID of the product to be displayed.
+     *
+     *  @return \Illuminate\Http\JsonResponse A JSON response with the product resource (200)
+     * or an error response: 404 if not found or 500 on server error.
+     *
+     */
+    public function show(int $id): JsonResponse
+    {
+        try {
+            
+            $product = Product::with(['category', 'brand'])->byId($id)->first();
+
+            if (!$product) {
+                return response()->json(['message' => 'Resource not found'], 404);
+            }
+
+            return response()->json([
+                'data' => new ShowProductResource($product)
+            ], 200);
+
+        } catch (\Throwable $e) {
+            Log::error("Product detail error: " . $e->getMessage());
             return response()->json(["error" => 'Internal server error'], 500);
         }
     }
