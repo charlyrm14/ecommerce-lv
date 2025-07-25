@@ -102,7 +102,7 @@ class Product extends Model
 
     /**
      * The scopeById function filters a query by the specified id value.
-     * 
+     *
      * @param Builder query The `` parameter is an instance of the
      * `Illuminate\Database\Eloquent\Builder` class, which is used for building database queries in
      * Laravel's Eloquent ORM.
@@ -112,5 +112,19 @@ class Product extends Model
     public function scopeById(Builder $query, int $id): void
     {
         $query->where('id', $id);
+    }
+
+    /**
+     * The scopeByUuid function filters a query by the specified id value.
+     * 
+     * @param Builder query The `` parameter is an instance of the
+     * `Illuminate\Database\Eloquent\Builder` class, which is used for building database queries in
+     * Laravel's Eloquent ORM.
+     * @param int id The `id` parameter is an integer value that is used to filter the query results
+     * based on the specified ID.
+     */
+    public function scopeByUuid(Builder $query, string $uuid): void
+    {
+        $query->where('uuid', $uuid);
     }
 }
