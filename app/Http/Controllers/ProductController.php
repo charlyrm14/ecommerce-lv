@@ -150,4 +150,35 @@ class ProductController extends Controller
             return response()->json(["error" => 'Internal server error'], 500);
         }
     }
+
+    /**
+     * Delete a product by id
+     *
+     * @param int $id The ID of the product to be deleted.
+     *
+     *  @return \Illuminate\Http\JsonResponse A JSON response with a message successfully product deleted (200)
+     * or an error response: 404 if not found or 500 on server error.
+     *
+     */
+    public function delete(int $id): JsonResponse
+    {
+        try {
+            
+            $product = Product::with(['category', 'brand'])->byId($id)->first();
+
+            if (!$product) {
+                return response()->json(['message' => 'Resource not found'], 404);
+            }
+
+            $product->delete();
+
+            return response()->json([
+                'message' => 'Product deleted successfully'
+            ], 200);
+
+        } catch (\Throwable $e) {
+            Log::error("Product delete error: " . $e->getMessage());
+            return response()->json(["error" => 'Internal server error'], 500);
+        }
+    }
 }
