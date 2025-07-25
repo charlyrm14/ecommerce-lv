@@ -6,10 +6,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\{
     BrandIndexRequest,
-    BrandStoreRequest
+    BrandStoreRequest,
+    BrandUpdateRequest
 };
 use App\Models\Brand;
 use App\Resources\Brands\NewBrandResource;
+use App\Resources\Brands\UpdateBrandResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 
@@ -71,6 +73,40 @@ class BrandController extends Controller
 
         } catch (\Throwable $e) {
             Log::error("Brand create error: " . $e->getMessage());
+            return response()->json(["error" => 'Internal server error'], 500);
+        }
+    }
+
+    /**
+     * Update an existing brand.
+     *
+     * Receives a validated request containing the updated brand data,
+     *
+     * @param \App\Http\Requests\BrandUpdateRequest $request The validated request with update data.
+     * @param int $id The ID of the brand to be updated.
+     *
+     * @return \Illuminate\Http\JsonResponse A JSON response with the updated brand resource (200),
+     * or an error response: 404 if not found, 422 if validation fails, or 500 on server error.
+     *
+     */
+    public function update(BrandUpdateRequest $request, int $id): JsonResponse
+    {
+        try {
+            
+            $brand = Brand::byId($id)->first();
+            
+            if (!$brand) {
+                return response()->json(['message' => 'Resource not found'], 404);
+            }
+
+            $brand->update($request->validated());
+
+            return response()->json([
+                'data' => new UpdateBrandResource($brand)
+            ], 200);
+
+        } catch (\Throwable $e) {
+            Log::error("Brand update error: " . $e->getMessage());
             return response()->json(["error" => 'Internal server error'], 500);
         }
     }

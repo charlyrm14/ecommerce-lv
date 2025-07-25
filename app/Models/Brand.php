@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -74,5 +75,19 @@ class Brand extends Model
     public function products(): HasMany
     {
         return $this->hasMany(Product::class);
+    }
+
+    /**
+     * The scopeById function filters a query by a specific ID value.
+     *
+     * @param Builder query The `` parameter is an instance of the
+     * `Illuminate\Database\Eloquent\Builder` class, which is used for building database queries in
+     * Laravel's Eloquent ORM.
+     * @param int id The "id" parameter is an integer value that is used to filter the query results
+     * based on the specified ID.
+     */
+    public function scopeById(Builder $query, int $id): void
+    {
+        $query->where('id', $id);
     }
 }
