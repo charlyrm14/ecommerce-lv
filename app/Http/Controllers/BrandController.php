@@ -142,4 +142,33 @@ class BrandController extends Controller
             return response()->json(["error" => 'Internal server error'], 500);
         }
     }
+
+    /**
+     * Delete a brand by id
+     *
+     * @param int $id The ID of the brand to be deleted.
+     *
+     *  @return \Illuminate\Http\JsonResponse A JSON response with a message successfully category deleted (200)
+     * or an error response: 404 if not found or 500 on server error.
+     *
+     */
+    public function delete(int $id): JsonResponse
+    {
+        try {
+
+            $brand = Brand::byId($id)->with('products.category')->first();
+            
+            if (!$brand) {
+                return response()->json(['message' => 'Resource not found'], 404);
+            }
+
+            return response()->json([
+                'message' => 'Brand deleted successfully'
+            ], 200);
+
+        } catch (\Throwable $e) {
+            Log::error("Brand delete error: " . $e->getMessage());
+            return response()->json(["error" => 'Internal server error'], 500);
+        }
+    }
 }
