@@ -19,6 +19,7 @@ Route::prefix('v1/')->group(function () {
 
     Route::prefix('brands/')->controller(BrandController::class)->group(function () {
         Route::get('', 'index');
+        Route::post('', 'store');
     });
 
     Route::prefix('products/')->controller(ProductController::class)->group(function () {
