@@ -133,7 +133,7 @@ class Category extends Model
     /**
      * This PHP function defines a scope in Laravel Eloquent that filters query results by a specified
      * slug value.
-     * 
+     *
      * @param Builder query The `` parameter is an instance of the
      * `Illuminate\Database\Eloquent\Builder` class, which is used for building database queries in
      * Laravel's Eloquent ORM.

@@ -121,21 +121,21 @@ class ProductController extends Controller
     }
 
     /**
-     * Display a detail of a product by id
+     * Display a detail of a product by uuid
      *
      * The product, loads their relationship with categories and brands that belongs to a product, and returns a JSON resource.
      *
-     * @param int $id The ID of the product to be displayed.
+     * @param string $uuid The uuid of the product to be displayed.
      *
      *  @return \Illuminate\Http\JsonResponse A JSON response with the product resource (200)
      * or an error response: 404 if not found or 500 on server error.
      *
      */
-    public function show(int $id): JsonResponse
+    public function show(string $uuid): JsonResponse
     {
         try {
             
-            $product = Product::with(['category', 'brand'])->byId($id)->first();
+            $product = Product::with(['category', 'brand'])->byUuid($uuid)->first();
 
             if (!$product) {
                 return response()->json(['message' => 'Resource not found'], 404);
