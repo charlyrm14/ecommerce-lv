@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Services\UtilsService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 class Product extends Model
 {
@@ -48,6 +50,31 @@ class Product extends Model
             'created_at' => 'datetime:Y-m-d',
             'updated_at' => 'datetime:Y-m-d',
         ];
+    }
+
+    /**
+     * The "booted" method of the model.
+     */
+    protected static function booted(): void
+    {
+        static::creating(function ($product) {
+            $product->uuid = (string) Str::uuid();
+            $product->sku = UtilsService::generateSku($product->name);
+        });
+
+        static::created(function (Product $product) {
+
+            $slug = Str::slug($product->name);
+            $exists = Product::where('slug', $slug)->exists();
+
+            if (!$exists) {
+                $product->slug = $slug;
+            } else {
+                $product->slug = "{$slug}-{$product->id}";
+            }
+
+            $product->save();
+        });
     }
 
     /**

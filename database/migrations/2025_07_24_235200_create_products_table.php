@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('sku', 120)->unique();
             $table->boolean('status')->default(true);
             $table->foreignId('category_id')->constrained()->onDelete('cascade');
-            $table->foreignId('brand_id')->constrained()->onDelete('cascade');
+            $table->foreignId('brand_id')->nullable()->constrained()->nullOnDelete();
             $table->uuid('uuid')->nullable()->unique();
             $table->timestamps();
             $table->softDeletes();
