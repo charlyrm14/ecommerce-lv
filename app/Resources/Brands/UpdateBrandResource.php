@@ -7,7 +7,7 @@ namespace App\Resources\Brands;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class NewBrandResource extends JsonResource {
+class UpdateBrandResource extends JsonResource {
 
     public function toArray($brand)
     {
