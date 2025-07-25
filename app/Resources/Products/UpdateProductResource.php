@@ -7,7 +7,7 @@ namespace App\Resources\Products;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class NewProductResource extends JsonResource {
+class UpdateProductResource extends JsonResource {
 
     public function toArray($product)
     {

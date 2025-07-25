@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\{
     ProductIndexRequest,
-    ProductStoreRequest
+    ProductStoreRequest,
+    ProductUpdateRequest
 };
 use App\Models\Product;
 use App\Resources\Products\NewProductResource;
+use App\Resources\Products\UpdateProductResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 
@@ -76,6 +78,43 @@ class ProductController extends Controller
 
         } catch (\Throwable $e) {
             Log::error("Product create error: " . $e->getMessage());
+            return response()->json(["error" => 'Internal server error'], 500);
+        }
+    }
+
+    /**
+     * Update an existing product.
+     *
+     * Receives a validated request containing the updated product data,
+     *
+     * the category, load a relationship with the category and brand that belongs the product
+     * and returns the resource as JSON..
+     *
+     * @param \App\Http\Requests\ProductUpdateRequest $request The validated request with update data.
+     * @param int $id The ID of the product to be updated.
+     *
+     * @return \Illuminate\Http\JsonResponse A JSON response with the updated category resource (200),
+     * or an error response: 404 if not found, 422 if validation fails, or 500 on server error.
+     */
+    public function update(ProductUpdateRequest $request, int $id): JsonResponse
+    {
+        try {
+
+            $product = Product::byId($id)->first();
+
+            if (!$product) {
+                return response()->json(['message' => 'Resource not found'], 404);
+            }
+
+            $product->update($request->validated());
+            $product->load(['category', 'brand']);
+
+            return response()->json([
+                'data' => new UpdateProductResource($product)
+            ], 200);
+            
+        }  catch (\Throwable $e) {
+            Log::error("Product update error: " . $e->getMessage());
             return response()->json(["error" => 'Internal server error'], 500);
         }
     }
