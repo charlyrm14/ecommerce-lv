@@ -142,11 +142,11 @@ class CategoryController extends Controller
      * or an error response: 404 if not found or 500 on server error.
      *
      */
-    public function show(int $id): JsonResponse
+    public function show(string $slug): JsonResponse
     {
         try {
 
-            $category = Category::with(['parent', 'childrenRecursive'])->byId($id)->first();
+            $category = Category::with(['parent', 'childrenRecursive'])->bySlug($slug)->first();
         
             if (!$category) {
                 return response()->json(['message' => 'Resource not found'], 404);

@@ -129,4 +129,20 @@ class Category extends Model
     {
         $query->where('id', $id);
     }
+
+    /**
+     * This PHP function defines a scope in Laravel Eloquent that filters query results by a specified
+     * slug value.
+     * 
+     * @param Builder query The `` parameter is an instance of the
+     * `Illuminate\Database\Eloquent\Builder` class, which is used for building database queries in
+     * Laravel's Eloquent ORM.
+     * @param string slug The `slug` parameter is a string that is used to filter the query results
+     * based on a specific slug value. The `scopeBySlug` function is a query scope that can be used to
+     * apply this filter when querying the database.
+     */
+    public function scopeBySlug(Builder $query, string $slug): void
+    {
+        $query->where('slug', $slug);
+    }
 }
