@@ -113,21 +113,21 @@ class BrandController extends Controller
     }
 
     /**
-     * Display a detail of a brand by id
+     * Display a detail of a brand by slug
      *
      * The brand, loads their relationship with products and category that belongs to a product, and returns a JSON resource.
      *
-     * @param int $id The ID of the brand to be displayed.
+     * @param string $id The slug of the brand to be displayed.
      *
      *  @return \Illuminate\Http\JsonResponse A JSON response with the category resource (200)
      * or an error response: 404 if not found or 500 on server error.
      *
      */
-    public function show(int $id): JsonResponse
+    public function show(string $slug): JsonResponse
     {
         try {
 
-            $brand = Brand::byId($id)->with('products.category')->first();
+            $brand = Brand::bySlug($slug)->with('products.category')->first();
             
             if (!$brand) {
                 return response()->json(['message' => 'Resource not found'], 404);
