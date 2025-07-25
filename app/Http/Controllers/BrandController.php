@@ -14,10 +14,10 @@ use Illuminate\Support\Facades\Log;
 class BrandController extends Controller
 {
     /**
-     * Display a list of categories
+     * Display a list of brands
      *
      * If the `names` query parameter is provided, the list will be filtered
-     * to include only categories that match the given names.
+     * to include only brands that match the given names.
      *
      * @param \App\Http\Requests\BrandIndexRequest $request with a possible filter name
      * @return \Illuminate\Http\JsonResponse JSON response with paged data or a no results found message
@@ -44,7 +44,7 @@ class BrandController extends Controller
             ], 200);
 
         } catch (\Throwable $e) {
-            Log::error("Category list error: " . $e->getMessage());
+            Log::error("Brand list error: " . $e->getMessage());
             return response()->json(["error" => 'Internal server error'], 500);
         }
     }

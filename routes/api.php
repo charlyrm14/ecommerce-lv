@@ -3,7 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\{
     BrandController,
-    CategoryController
+    CategoryController,
+    ProductController
 };
 
 Route::prefix('v1/')->group(function () {
@@ -17,6 +18,10 @@ Route::prefix('v1/')->group(function () {
     });
 
     Route::prefix('brands/')->controller(BrandController::class)->group(function () {
+        Route::get('', 'index');
+    });
+
+    Route::prefix('products/')->controller(ProductController::class)->group(function () {
         Route::get('', 'index');
     });
 
