@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\{
     BrandController,
+    CartController,
     CategoryController,
     ProductController
 };
@@ -31,6 +32,10 @@ Route::prefix('v1/')->group(function () {
         Route::put('{id}', 'update');
         Route::get('{uuid}', 'show');
         Route::delete('{id}', 'delete');
+    });
+
+    Route::prefix('carts/')->controller(CartController::class)->group(function () {
+        Route::post('', 'store');
     });
 
 });

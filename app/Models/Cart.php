@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection as SupportCollection;
 
 class Cart extends Model
 {
@@ -51,5 +53,23 @@ class Cart extends Model
     public function cartItems(): HasMany
     {
         return $this->hasMany(CartItem::class);
+    }
+
+    /**
+     * Stores or updates items in the given cart.
+     *
+     * Iterates through the provided list of products and inserts or updates
+     * each item in the cart based on the product ID.
+     *
+     * @param \App\Models\Cart $cart The cart instance where the items will be stored.
+     * @param array $requestedProducts An array of product data to be added or updated in the cart.
+     *
+     * @return void
+ */
+    public static function storeItems(Cart $cart, array $requestedProducts): void
+    {
+        foreach ($requestedProducts as $item) {
+            $cart->cartItems()->updateOrCreate(['cart_id' => $cart->id, 'product_id' => $item['product_id']], $item);
+        }
     }
 }
