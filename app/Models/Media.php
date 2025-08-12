@@ -36,22 +36,34 @@ class Media extends Model
     }
 
     /**
-     * Create and persist a Media record with the given file path, MIME type, and size label.
+     * Create and persist a Media record with the given file path, MIME type, image variant,
+     * and optionally a parent Media ID.
      *
-     * This method stores the metadata of an uploaded media file in the database.
+     * This method stores metadata of an uploaded media file in the database.
+     * It supports linking different image variants (e.g., thumbnail, medium)
+     * to a parent/original image via the $parentId parameter.
      *
      * @param string $filePath The relative path to the stored file.
      * @param string $mimeType The MIME type of the file (e.g., "image/png", "file/xlsx").
-     * @param string $size A label representing the size variant (e.g., "original", "medium", "thumbnail").
+     * @param string|null $image_variant A label representing the image variant
+     * (e.g., "original", "medium", "thumbnail").
+     * @param int|null $parentId The ID of the parent Media record if this file is a
+     * variant of another image, or null if it is the original.
      *
-     * @return \App\Models\Media The newly created Media model instance.
+     * @return \App\Models\Media     The newly created Media model instance.
      */
-    public static function storeFile(string $filePath, string $mimeType, string $size): Media
+    public static function storeMediaRecord(
+        string $filePath,
+        string $mimeType,
+        string|null $image_variant = null,
+        int|null $parentId = null
+    ): Media
     {
         return self::create([
             'file_path' => $filePath,
             'mime_type' => $mimeType,
-            'size' => $size
+            'image_variant' => $image_variant,
+            'parent_id' => $parentId
         ]);
     }
 }
