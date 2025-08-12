@@ -12,17 +12,29 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 class FileService {
 
     /**
-     * Generates a folder name for the uploaded files based on the current date.
+     * Generate a date-based folder path for storing uploaded files under the "uploads" directory.
      *
-     * The folder path format is: "uploads/YYYY/mm/dd/"
-     * Example output: "uploads/2025/08/11/"
+     * The folder structure follows the pattern: "uploads/YYYY/mm/dd/"
+     * where YYYY is the current year, mm is the zero-padded month, and dd is the zero-padded day.
      *
-     * @return string The folder name.
+     * If the folder does not exist, it will be created with permissions 0755, including any necessary parent directories.
+     *
+     * @return string The relative folder path (e.g., "uploads/2025/08/12/").
+     *
+     * @throws \RuntimeException If the folder creation fails.
      */
-    public static function getUploadFolderPath(): string
+    public static function generateUploadsFolderPath(): string
     {
         $now = Carbon::now();
-        return 'uploads/' . $now->year . '/' . $now->format('m') . '/' . $now->format('d') . '/';
+        $folder = 'uploads/' . $now->year . '/' . $now->format('m') . '/' . $now->format('d') . '/';
+
+        $fullPath = public_path($folder);
+
+        if (!file_exists($fullPath)) {
+            mkdir($fullPath, 0755, true);
+        }
+
+        return $folder;
     }
 
     /**
@@ -42,7 +54,7 @@ class FileService {
     {
         try {
 
-            $folder = self::getUploadFolderPath();
+            $folder = self::generateUploadsFolderPath();
 
             $file_name = $file->hashName();
             
