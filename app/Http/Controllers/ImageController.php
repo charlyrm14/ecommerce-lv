@@ -45,8 +45,8 @@ class ImageController extends Controller
             
             DB::beginTransaction();
 
-            $storeThumbnailImage = Media::storeFile($thumbnail, $mimeType, 'thumbnail');
-            $storeOriginalImage = Media::storeFile($original, $mimeType, 'original');
+            $storeOriginalImage = Media::storeMediaRecord($original, $mimeType, 'original');
+            $storeThumbnailImage = Media::storeMediaRecord($thumbnail, $mimeType, 'thumbnail', $storeOriginalImage->id);
 
             DB::commit();
 
