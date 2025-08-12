@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('file_path');
             $table->string('mime_type');
-            $table->string('size');
+            $table->string('image_variant')->nullable();
+            $table->unsignedBigInteger('parent_id')->nullable();
             $table->unsignedBigInteger('mediaable_id')->nullable();
             $table->string('mediaable_type')->nullable();
             $table->timestamps();
