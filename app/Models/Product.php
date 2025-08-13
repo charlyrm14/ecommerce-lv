@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
-use App\Services\UtilsService;
+use App\Observers\ProductObserver;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 
+#[ObservedBy([ProductObserver::class])]
 class Product extends Model
 {
     use SoftDeletes;
@@ -54,17 +55,6 @@ class Product extends Model
     }
 
     /**
-     * The "booted" method of the model.
-     */
-    protected static function booted(): void
-    {
-        static::creating(function ($product) {
-            $product->uuid = (string) Str::uuid();
-            $product->sku = UtilsService::generateSku($product->name);
-        });
-    }
-
-    /**
      * The function brand() returns a belongsTo relationship with the Brand model
      * in PHP.
      *
@@ -102,7 +92,7 @@ class Product extends Model
 
     /**
      * The scopeByUuid function filters a query by the specified id value.
-     * 
+     *
      * @param Builder query The `` parameter is an instance of the
      * `Illuminate\Database\Eloquent\Builder` class, which is used for building database queries in
      * Laravel's Eloquent ORM.
