@@ -5,6 +5,7 @@ use App\Http\Controllers\{
     BrandController,
     CartController,
     CategoryController,
+    FileController,
     ImageController,
     ProductController
 };
@@ -40,9 +41,12 @@ Route::prefix('v1/')->group(function () {
     });
 
     Route::prefix('files/')->group(function () {
+
         Route::prefix('images/')->controller(ImageController::class)->group(function () {
             Route::post('', 'store');
         });
+        
+        Route::delete('{id}', [FileController::class, 'delete']);
     });
 
 });
