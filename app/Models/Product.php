@@ -75,29 +75,29 @@ class Product extends Model
     {
         return $this->belongsTo(Category::class);
     }
-
+    
     /**
-     * The scopeById function filters a query by the specified id value.
+     * The function getById retrieves an object by its ID if it exists.
      *
-     * @param Builder query The `` parameter is an instance of the
-     * `Illuminate\Database\Eloquent\Builder` class, which is used for building database queries in
-     * Laravel's Eloquent ORM.
-     * @param int id The `id` parameter is an integer value that is used to filter the query results
-     * based on the specified ID.
+     * @param int id The parameter `id` in the `getById` function is an integer that represents the
+     * unique identifier of the object you want to retrieve.
+     *
+     * @return ?self The `getById` method is returning an instance of the class that it belongs to, or
+     * `null` if no instance is found with the specified ID.
      */
-    public function scopeById(Builder $query, int $id): void
+    public static function getById(int $id): ?self
     {
-        $query->where('id', $id);
+        return static::find($id);
     }
 
     /**
-     * The scopeByUuid function filters a query by the specified id value.
+     * The scopeByUuid function filters a query by a specific UUID value.
      *
-     * @param Builder query The `` parameter is an instance of the
-     * `Illuminate\Database\Eloquent\Builder` class, which is used for building database queries in
-     * Laravel's Eloquent ORM.
-     * @param int id The `id` parameter is an integer value that is used to filter the query results
-     * based on the specified ID.
+     * @param Builder query The `` parameter is an instance of the Laravel query builder class
+     * `Illuminate\Database\Eloquent\Builder`. It is used to build and execute database queries in an
+     * object-oriented way.
+     * @param string uuid The `uuid` parameter is a string that represents a universally unique
+     * identifier (UUID). It is used to uniquely identify a specific entity or resource in a system.
      */
     public function scopeByUuid(Builder $query, string $uuid): void
     {

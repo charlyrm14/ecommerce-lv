@@ -101,7 +101,7 @@ class ProductController extends Controller
     {
         try {
 
-            $product = Product::byId($id)->first();
+            $product = Product::getById($id);
 
             if (!$product) {
                 return response()->json(['message' => 'Resource not found'], 404);
@@ -164,7 +164,7 @@ class ProductController extends Controller
     {
         try {
             
-            $product = Product::with(['category', 'brand'])->byId($id)->first();
+            $product = Product::getById($id);
 
             if (!$product) {
                 return response()->json(['message' => 'Resource not found'], 404);
