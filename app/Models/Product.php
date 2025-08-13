@@ -62,20 +62,6 @@ class Product extends Model
             $product->uuid = (string) Str::uuid();
             $product->sku = UtilsService::generateSku($product->name);
         });
-
-        static::created(function (Product $product) {
-
-            $slug = Str::slug($product->name);
-            $exists = Product::where('slug', $slug)->exists();
-
-            if (!$exists) {
-                $product->slug = $slug;
-            } else {
-                $product->slug = "{$slug}-{$product->id}";
-            }
-
-            $product->save();
-        });
     }
 
     /**
