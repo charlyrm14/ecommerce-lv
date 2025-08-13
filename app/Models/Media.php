@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Observers\MediaObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 
+#[ObservedBy([MediaObserver::class])]
 class Media extends Model
 {
     protected $table = 'media';

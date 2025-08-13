@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Media;
-use App\Services\FileService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -38,13 +37,7 @@ class FileController extends Controller
             if(!$media) {
                 return response()->json(['message' => 'Resource not found'], 404);
             }
-
-            $media->variants->each(function($variant){
-                FileService::deleteFileFromPath($variant->file_path);
-            });
-
-            FileService::deleteFileFromPath($media->file_path);
-
+            
             DB::beginTransaction();
 
             $media->variants()->delete();
