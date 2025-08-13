@@ -47,26 +47,6 @@ class Brand extends Model
     }
 
     /**
-     * The "booted" method of the model.
-     */
-    protected static function booted(): void
-    {
-        static::created(function (Brand $brand) {
-
-            $slug = Str::slug($brand->name);
-            $exists = Brand::where('slug', $slug)->exists();
-
-            if (!$exists) {
-                $brand->slug = $slug;
-            } else {
-                $brand->slug = "{$slug}-{$brand->id}";
-            }
-
-            $brand->save();
-        });
-    }
-
-    /**
      * The function products() returns a HasMany relationship with the Product model
      * in PHP.
      *

@@ -52,26 +52,6 @@ class Category extends Model
     }
 
     /**
-     * The "booted" method of the model.
-     */
-    protected static function booted(): void
-    {
-        static::created(function (Category $category) {
-
-            $slug = Str::slug($category->name);
-            $exists = Category::where('slug', $slug)->exists();
-
-            if (!$exists) {
-                $category->slug = $slug;
-            } else {
-                $category->slug = "{$slug}-{$category->id}";
-            }
-
-            $category->save();
-        });
-    }
-
-    /**
      * The function parent() returns a belongsTo relationship with the Category model
      * in PHP.
      *
