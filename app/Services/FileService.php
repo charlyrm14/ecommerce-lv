@@ -7,6 +7,7 @@ namespace App\Services;
 use Carbon\Carbon;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\File;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class FileService {
@@ -69,5 +70,26 @@ class FileService {
                 response()->json(['message' => 'Error saving file on disk'], 400)
             );
         }
+    }
+
+    /**
+     * Deletes a file from the filesystem given its relative or absolute path.
+     *
+     * This method checks if the file exists before attempting deletion.
+     * If the file does not exist, it returns false.
+     * If the file is successfully deleted, it returns true.
+     *
+     * @param string $pathFile The file path to delete.
+     * @return bool True if the file was deleted successfully; false if the file did not exist.
+     */
+    public static function deleteFileFromPath(string $pathFile): bool
+    {
+        if (!File::exists($pathFile)) {
+            return false;
+        }
+
+        File::delete($pathFile);
+
+        return true;
     }
 }

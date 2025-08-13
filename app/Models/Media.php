@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Media extends Model
@@ -33,6 +34,11 @@ class Media extends Model
     public function imageable(): MorphTo
     {
         return $this->morphTo();
+    }
+
+    public function variants(): HasMany
+    {
+        return $this->hasMany(Media::class, 'parent_id');
     }
 
     /**
