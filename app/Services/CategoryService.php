@@ -68,7 +68,7 @@ class CategoryService {
     public static function validateParentIsNotSubcategory(?int $parentId): void
     {
         if (!is_null($parentId)) {
-            $parentCategory = Category::byId($parentId)->first();
+            $parentCategory = Category::getById($parentId);
 
             if (!$parentCategory) {
                 throw new HttpResponseException(

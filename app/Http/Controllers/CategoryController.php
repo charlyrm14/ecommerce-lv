@@ -105,8 +105,8 @@ class CategoryController extends Controller
     {
         try {
             
-            $category = Category::byId($id)->first();
-        
+            $category = Category::getById($id);
+            
             if (!$category) {
                 return response()->json(['message' => 'Not found'], 404);
             }
@@ -114,7 +114,7 @@ class CategoryController extends Controller
             CategoryService::validateNotSelfParent($category->id, $request->parent_id);
             CategoryService::validateMainCategoryNotAssignedToMain($category->parent_id, $request->parent_id);
             CategoryService::validateParentIsNotSubcategory($request->parent_id);
-
+            
             $category->update($request->validated());
             $category->load('parent');
 
@@ -175,7 +175,7 @@ class CategoryController extends Controller
     {
         try {
 
-            $category = Category::with('parent')->byId($id)->first();
+            $category = Category::getById($id);
             
             if (!$category) {
                 return response()->json(['message' => 'Resource not found'], 404);

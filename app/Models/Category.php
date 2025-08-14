@@ -95,19 +95,19 @@ class Category extends Model
         return $this->hasMany(Product::class);
     }
 
+
     /**
-     * The scopeById function filters a query by the specified id value.
+     * The function getById retrieves a Category object by its ID if it exists.
      *
-     * @param Builder query The `` parameter is an instance of the
-     * `Illuminate\Database\Eloquent\Builder` class, which is used for building database queries in
-     * Laravel's Eloquent ORM.
-     * @param int id The `id` parameter in the `scopeById` function is an integer value that is used to
-     * filter the query results based on the `id` column in the database table. The function will
-     * modify the query to only include records where the `id` column matches the provided `id` value.
+     * @param int id The parameter `id` is an integer value that represents the unique identifier of a
+     * category.
+     *
+     * @return ?Category The `getById` function is returning an instance of the `Category` class with
+     * the specified ID, or `null` if no category with that ID is found.
      */
-    public function scopeById(Builder $query, int $id): void
+    public static function getById(int $id): ?Category
     {
-        $query->where('id', $id);
+        return static::find($id);
     }
 
     /**
