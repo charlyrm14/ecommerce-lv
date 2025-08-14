@@ -58,17 +58,17 @@ class Brand extends Model
     }
 
     /**
-     * The scopeById function filters a query by a specific ID value.
+     * The function getById retrieves a Brand object by its ID if it exists.
      *
-     * @param Builder query The `` parameter is an instance of the
-     * `Illuminate\Database\Eloquent\Builder` class, which is used for building database queries in
-     * Laravel's Eloquent ORM.
-     * @param int id The "id" parameter is an integer value that is used to filter the query results
-     * based on the specified ID.
+     * @param int id The parameter `id` is an integer value that represents the unique identifier of a
+     * brand.
+     *
+     * @return ?Brand The `getById` function is returning an instance of the `Brand` class with the
+     * specified ID, or `null` if no matching record is found.
      */
-    public function scopeById(Builder $query, int $id): void
+    public static function getById(int $id): ?Brand
     {
-        $query->where('id', $id);
+        return static::find($id);
     }
 
     /**

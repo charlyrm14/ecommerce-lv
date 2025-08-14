@@ -94,7 +94,7 @@ class BrandController extends Controller
     {
         try {
             
-            $brand = Brand::byId($id)->first();
+            $brand = Brand::getById($id);
             
             if (!$brand) {
                 return response()->json(['message' => 'Resource not found'], 404);
@@ -156,11 +156,13 @@ class BrandController extends Controller
     {
         try {
 
-            $brand = Brand::byId($id)->with('products.category')->first();
+            $brand = Brand::getById($id);
             
             if (!$brand) {
                 return response()->json(['message' => 'Resource not found'], 404);
             }
+
+            $brand->delete();
 
             return response()->json([
                 'message' => 'Brand deleted successfully'
