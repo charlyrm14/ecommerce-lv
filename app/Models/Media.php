@@ -39,40 +39,17 @@ class Media extends Model
         return $this->morphTo();
     }
 
+    /**
+     * The variants function returns a collection of Media instances associated with the current model
+     * through a hasMany relationship.
+     *
+     * @return HasMany A relationship method named "variants" is being returned. This method defines a
+     * one-to-many relationship using the Laravel Eloquent ORM. It specifies that the current model has
+     * many instances of the "Media" model where the "parent_id" column in the "Media" table matches
+     * the primary key of the current model.
+     */
     public function variants(): HasMany
     {
         return $this->hasMany(Media::class, 'parent_id');
-    }
-
-    /**
-     * Create and persist a Media record with the given file path, MIME type, image variant,
-     * and optionally a parent Media ID.
-     *
-     * This method stores metadata of an uploaded media file in the database.
-     * It supports linking different image variants (e.g., thumbnail, medium)
-     * to a parent/original image via the $parentId parameter.
-     *
-     * @param string $filePath The relative path to the stored file.
-     * @param string $mimeType The MIME type of the file (e.g., "image/png", "file/xlsx").
-     * @param string|null $image_variant A label representing the image variant
-     * (e.g., "original", "medium", "thumbnail").
-     * @param int|null $parentId The ID of the parent Media record if this file is a
-     * variant of another image, or null if it is the original.
-     *
-     * @return \App\Models\Media     The newly created Media model instance.
-     */
-    public static function storeMediaRecord(
-        string $filePath,
-        string $mimeType,
-        string|null $image_variant = null,
-        int|null $parentId = null
-    ): Media
-    {
-        return self::create([
-            'file_path' => $filePath,
-            'mime_type' => $mimeType,
-            'image_variant' => $image_variant,
-            'parent_id' => $parentId
-        ]);
     }
 }
