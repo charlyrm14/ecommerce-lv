@@ -2,17 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\{
+    Media,
+    Product
+};
 use App\Http\Requests\{
     ProductIndexRequest,
     ProductStoreRequest,
     ProductUpdateRequest
 };
-use App\Models\Product;
+use App\Services\ProductService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 use App\Resources\Products\NewProductResource;
 use App\Resources\Products\ShowProductResource;
 use App\Resources\Products\UpdateProductResource;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Log;
+
 
 class ProductController extends Controller
 {
@@ -69,15 +75,22 @@ class ProductController extends Controller
     {
         try {
             
-            $product = Product::create($request->validated());
+            DB::beginTransaction();
 
-            $product->load(['category', 'brand']);
+            $product = Product::create($request->validated());
+            
+            ProductService::attachImages($product, $request->images);
+
+            DB::commit();
+
+            $product->load(['category', 'brand', 'images']);
 
             return response()->json([
                 'data' => new NewProductResource($product)
             ], 201);
 
         } catch (\Throwable $e) {
+            DB::rollBack();
             Log::error("Product create error: " . $e->getMessage());
             return response()->json(["error" => 'Internal server error'], 500);
         }
