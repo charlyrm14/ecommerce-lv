@@ -28,13 +28,26 @@ class Media extends Model
     ];
 
     /**
-     * The function `imageable()` returns a polymorphic relationship for the model.
+     * Get the attributes that should be cast.
      *
-     * @return MorphTo The `imageable()` function is returning a MorphTo relationship. This function is
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'created_at' => 'datetime:Y-m-d',
+            'updated_at' => 'datetime:Y-m-d',
+        ];
+    }
+
+    /**
+     * The function `mediaable()` returns a polymorphic relationship for the model.
+     *
+     * @return MorphTo The `mediaable()` function is returning a MorphTo relationship. This function is
      * typically used in Laravel Eloquent models to define a polymorphic relationship, allowing the
      * model to belong to multiple other models.
      */
-    public function imageable(): MorphTo
+    public function mediaable(): MorphTo
     {
         return $this->morphTo();
     }

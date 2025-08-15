@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 #[ObservedBy([ProductObserver::class])]
 class Product extends Model
@@ -74,6 +75,20 @@ class Product extends Model
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
+    }
+
+    /**
+     * The `images` function returns a polymorphic relationship for the `Media` model associated with a
+     * specific model.
+     *
+     * @return MorphMany A MorphMany relationship is being returned. This relationship allows the model
+     * to have multiple image media associated with it through polymorphic relations. The images method
+     * returns a morphMany relationship with the Media model, specifying 'mediaable' as the morphable
+     * type.
+     */
+    public function images(): MorphMany
+    {
+        return $this->morphMany(Media::class, 'mediaable');
     }
     
     /**

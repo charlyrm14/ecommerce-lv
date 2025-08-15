@@ -30,7 +30,9 @@ class ProductStoreRequest extends FormRequest
             'stock' => ['required', 'integer', 'lte:15'],
             'status' => ['required', 'integer', 'in:1,0'],
             'category_id' => ['required', 'exists:categories,id'],
-            'brand_id' => ['nullable', 'exists:brands,id']
+            'brand_id' => ['nullable', 'exists:brands,id'],
+            'images' => ['nullable', 'array'],
+            'images.*' => ['integer', 'exists:media,id']
         ];
     }
 
