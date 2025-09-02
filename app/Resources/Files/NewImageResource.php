@@ -12,7 +12,10 @@ class NewImageResource extends JsonResource {
     {
         return [
             'id' => $this->id,
-            'file_path' => $this->file_path
+            'original_name' => $this->original_name,
+            'file_name' => $this->file_name,
+            'file_path' => $this->file_path,
+            'mime_type' => $this->mime_type
         ];
     }
 }
