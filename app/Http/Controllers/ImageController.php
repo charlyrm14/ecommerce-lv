@@ -37,27 +37,28 @@ class ImageController extends Controller
         try {
 
             $image = $request->file('file');
-            $mimeType = $image->getMimeType();
 
             $original = FileService::storeOnDisk($image);
-
-            $thumbnail = ImageService::generateResizedImage($original, ['height' => 200, 'prefix' => 'thumbnail_']);
+            $thumbnail = ImageService::generateResizedImage($original['file_path'], ['height' => 200, 'prefix' => 'thumbnail_']);
             
             DB::beginTransaction();
 
             $storeOriginalImage = Media::create([
-                'file_path' => $original,
-                'mime_type' => $mimeType,
+                'file_path' => $original['file_path'],
+                'mime_type' => $original['mime_type'],
                 'image_variant' => 'original'
             ]);
 
             $storeThumbnailImage = Media::create([
                 'file_path' => $thumbnail,
-                'mime_type' => $mimeType,
+                'mime_type' => $original['mime_type'],
                 'image_variant' => 'thumbnail',
                 'parent_id' => $storeOriginalImage->id
             ]);
 
+            FileService::addFileMetaData($storeOriginalImage, $original);
+            FileService::addFileMetaData($storeThumbnailImage, $original);
+            
             DB::commit();
 
             return response()->json([
