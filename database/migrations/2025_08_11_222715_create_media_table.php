@@ -15,7 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('file_path');
             $table->string('mime_type');
-            $table->string('image_variant')->nullable();
+            $table->string('variant')->nullable();
+            $table->integer('width')->nullable();
+            $table->integer('height')->nullable();
+            $table->string('resolution')->nullable();
             $table->unsignedBigInteger('parent_id')->nullable();
             $table->unsignedBigInteger('mediaable_id')->nullable();
             $table->string('mediaable_type')->nullable();

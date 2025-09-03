@@ -1,13 +1,50 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
+use App\Http\Requests\FileStoreRequest;
 use App\Models\Media;
+use App\Uploads\UploadManager;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class FileController extends Controller
 {
+    public function __construct(
+        protected UploadManager $manager
+    ){}
+
+    /**
+     * Handle the upload of a file.
+     *
+     * This method receives a validated file from the request,
+     * delegates the upload process to the UploadManager,
+     * and returns a JSON response containing the file metadata.
+     *
+     * @param FileStoreRequest $request The validated file upload request.
+     * @return JsonResponse A JSON response with the uploaded file payload and HTTP 201 status.
+     */
+    public function store(FileStoreRequest $request): JsonResponse
+    {
+        try {
+            
+            $file = $request->file('file');
+
+            $payload = $this->manager->handle($file);
+
+            return response()->json([$payload], 201);
+
+        } catch (\Throwable $e) {
+
+            Log::error("Store file error: " . $e->getMessage());
+            
+            return response()->json(["error" => 'Failed to upload file. Please try again later'], 500);
+        }
+    }
+
     /**
      * Deletes a media record and all its related variant files from storage and database.
      *
@@ -28,7 +65,7 @@ class FileController extends Controller
      * @param int $id The ID of the media record to be deleted.
      * @return \Illuminate\Http\JsonResponse JSON response indicating success or failure.
      */
-    public function delete(int $id)
+    public function delete(int $id): JsonResponse
     {
         try {
 

@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Contracts\Validation\Validator;
 
-class ImageStoreRequest extends FormRequest
+class FileStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,7 @@ class ImageStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'file' => ['required', 'image', 'max:3072']
+            'file' => ['required', 'file', 'max:5120']
         ];
     }
 
