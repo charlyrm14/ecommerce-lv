@@ -148,7 +148,7 @@ class ProductController extends Controller
     {
         try {
             
-            $product = Product::with(['category', 'brand'])->byUuid($uuid)->first();
+            $product = Product::with(['category', 'brand', 'files.variants'])->byUuid($uuid)->first();
 
             if (!$product) {
                 return response()->json(['message' => 'Resource not found'], 404);

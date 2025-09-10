@@ -87,7 +87,7 @@ class Product extends Model
      * returns a morphMany relationship with the Media model, specifying 'mediaable' as the morphable
      * type.
      */
-    public function images(): MorphMany
+    public function files(): MorphMany
     {
         return $this->morphMany(Media::class, 'mediaable');
     }
