@@ -20,6 +20,7 @@ class Media extends Model
      */
     protected $fillable = [
         'file_path',
+        'is_main',
         'mime_type',
         'variant',
         'width',

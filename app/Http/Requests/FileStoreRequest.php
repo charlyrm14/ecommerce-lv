@@ -24,7 +24,8 @@ class FileStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'file' => ['required', 'file', 'max:5120']
+            'files' => ['required', 'array', 'min:1'],
+            'files.*' => ['file', 'max:5120', 'mimes:jpg,jpeg,png,gif,webp,pdf,xlsx,csv']
         ];
     }
 

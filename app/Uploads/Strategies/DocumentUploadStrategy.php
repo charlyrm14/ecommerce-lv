@@ -22,22 +22,13 @@ class DocumentUploadStrategy implements UploadStrategy
         ]);
 
         return [
-            'data' => [
-                'id' => $storeDoc->id,
-                'type' => 'image',
-                'mime_type' => $storeDoc->mime_type,
-                'variants' => [
-                    'original' => [
-                        'id' => $storeDoc->id,
-                        'file_path' => $storeDoc->file_path,
-                        'size' => null,
-                        'width' => null,
-                        'height' => null,
-                        'resolution' => null,
-                        'original_name' => $document['original_name'] ?? null
-                    ],
-                ],
-            ],
+
+            'id' => $storeDoc->id,
+            'file_path' => $storeDoc->file_path,
+            'mime_type' => $storeDoc->mime_type,
+            'variant' => 'original',
+            'original_name' => $document['original_name'] ?? null,
+            'variants' => []
         ];
     }
 }
