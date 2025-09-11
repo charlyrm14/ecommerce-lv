@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('media', function (Blueprint $table) {
             $table->id();
             $table->string('file_path');
+            $table->boolean('is_main')->default(false);
             $table->string('mime_type');
             $table->string('variant')->nullable();
             $table->integer('width')->nullable();

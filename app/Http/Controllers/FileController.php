@@ -31,11 +31,17 @@ class FileController extends Controller
     {
         try {
             
-            $file = $request->file('file');
+            $files = $request->file('files');
 
-            $payload = $this->manager->handle($file);
+            $payload = [];
 
-            return response()->json([$payload], 201);
+            foreach ($files as $key => $file) {
+                $payload[$key] = $this->manager->handle($file);
+            }
+
+            return response()->json([
+                'data' => $payload
+            ], 201);
 
         } catch (\Throwable $e) {
 

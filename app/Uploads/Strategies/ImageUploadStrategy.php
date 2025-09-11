@@ -41,31 +41,23 @@ class ImageUploadStrategy implements UploadStrategy
             ]);
 
             return [
-                'data' => [
-                    'id' => $storeOriginal->id,
-                    'type' => 'image',
-                    'mime_type' => $storeOriginal->mime_type,
-                    'variants' => [
-                        'original' => [
-                            'id' => $storeOriginal->id,
-                            'file_path' => $storeOriginal->file_path,
-                            'size' => null,
-                            'width' => null,
-                            'height' => null,
-                            'resolution' => null,
-                            'original_name' => $original['original_name'] ?? null
-                        ],
-                        'thumbnail' => [
-                            'id' => $storeThumbnail->id,
-                            'file_path' => $storeThumbnail->file_path,
-                            'size' => null,
-                            'width' => null,
-                            'height' => null,
-                            'resolution' => null,
-                            'original_name' => $original['original_name'] ?? null
-                        ],
-                    ],
-                ],
+                'id' => $storeOriginal->id,
+                'file_path' => $storeOriginal->file_path,
+                'mime_type' => $storeOriginal->mime_type,
+                'variant' => 'original',
+                'original_name' => $original['original_name'] ?? null,
+                'variants' => [
+                    [
+                        'id' => $storeThumbnail->id,
+                        'variant' => 'thumbnail',
+                        'file_path' => $storeThumbnail->file_path,
+                        'size' => null,
+                        'width' => null,
+                        'height' => null,
+                        'resolution' => null,
+                        'original_name' => $original['original_name'] ?? null
+                    ]
+                ]
             ];
         });
     }

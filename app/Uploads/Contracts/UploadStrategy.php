@@ -11,21 +11,23 @@ interface UploadStrategy
     /**
      * Upload file and return a generic response with variants of the file
      *
-     * @return array {
+     * @return
      *  data: array {
      *      id: int,
-     *      type: string,
+     *      file_path: string,
      *      mime_type: string,
-     *      variants: array<string, array {
+     *      variant: string,
+     *      original_name: string,
+     *      variants array {
      *          id: int,
+     *          variant: string,
      *          file_path: string,
      *          size?: int,
      *          width?: int,
      *          height?: int,
      *          resolution?: string,
      *          original_name?: string
-     *     }>
-     *  }
+     *      }
      * }
      */
     public function upload(UploadedFile $file): array;
