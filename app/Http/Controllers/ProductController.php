@@ -83,7 +83,7 @@ class ProductController extends Controller
 
             DB::commit();
 
-            $product->load(['category', 'brand', 'images']);
+            $product->load(['category', 'brand', 'files']);
 
             return response()->json([
                 'data' => new NewProductResource($product)

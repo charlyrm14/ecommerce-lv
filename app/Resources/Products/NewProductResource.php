@@ -27,13 +27,14 @@ class NewProductResource extends JsonResource {
             'updated_at' => Carbon::parse($this->updated_at)->format('Y-m-d'),
             'category' => $this->whenLoaded('category'),
             'brand' => $this->whenLoaded('brand'),
-            'images' => $this->whenLoaded('images', function() {
-                return $this->images->map(function ($image) {
+            'files' => $this->whenLoaded('files', function() {
+                return $this->files->map(function ($image) {
                     return [
                         'id' => $image->id,
                         'file_path' => $image->file_path,
+                        'is_main' => $image->is_main,
                         'mime_type' => $image->mime_type,
-                        'image_variant' => $image->image_variant
+                        'variant' => $image->image_variant
                     ];
                 });
             })
