@@ -36,7 +36,7 @@ class ProductService {
             })->get();
             
             if ($images->isNotEmpty()) {
-                $product->images()->saveMany($images);
+                $product->files()->saveMany($images);
             }
         }
     }
