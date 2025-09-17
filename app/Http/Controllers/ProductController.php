@@ -46,7 +46,10 @@ class ProductController extends Controller
                 });
             }
 
-            $products = $query->paginate(15);
+            $products = $query->with(['files' => function($q) {
+                    $q->where('is_main', 1);
+                }
+            ])->paginate(15);
 
             if ($products->isEmpty()) {
                 return response()->json(['message' => 'No results found'], 404);
