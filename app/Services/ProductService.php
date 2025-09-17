@@ -8,6 +8,7 @@ use App\Models\{
     Media,
     Product
 };
+use Illuminate\Support\Arr;
 
 class ProductService {
 
@@ -23,19 +24,31 @@ class ProductService {
      *
      * @return void
      */
-    public static function attachImages(Product $product, array $imageIds): void
+    public static function attachImages(Product $product, array $dataImages): void
     {
-        if (!empty($imageIds)) {
+        if (!empty($dataImages)) {
 
-            $images = Media::whereIn('id', $imageIds)
-                ->orWhereIn('id', function ($query) use ($imageIds) {
-                    $query->select('parent_id')
-                        ->from('media')
-                        ->whereIn('id', $imageIds)
-                        ->whereNotNull('parent_id');
-            })->get();
+            $imagesIds = array_column($dataImages, 'id');
+
+            $images = Media::whereIn('id', $imagesIds)
+                ->orWhereIn('parent_id', $imagesIds)
+                ->get();
             
             if ($images->isNotEmpty()) {
+                
+                $mapIsMain = collect($dataImages)
+                    ->pluck('is_main', 'id')
+                    ->toArray();
+                
+                $images->each(function ($image) use ($mapIsMain) {
+                    $image->is_main = $mapIsMain[$image->id] ?? false;
+
+                    // Si es un thumbnail (tiene parent_id), hereda valor is_main del padre,
+                    if ($image->parent_id && isset($mapIsMain[$image->parent_id])) {
+                        $image->is_main = $mapIsMain[$image->parent_id];
+                    }
+                });
+
                 $product->files()->saveMany($images);
             }
         }

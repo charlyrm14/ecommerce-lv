@@ -32,7 +32,8 @@ class ProductStoreRequest extends FormRequest
             'category_id' => ['required', 'exists:categories,id'],
             'brand_id' => ['nullable', 'exists:brands,id'],
             'images' => ['nullable', 'array'],
-            'images.*' => ['integer', 'exists:media,id']
+            'images.*.id' => ['required', 'integer', 'exists:media,id'],
+            'images.*.is_main' => ['required', 'boolean']
         ];
     }
 
