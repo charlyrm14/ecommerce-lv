@@ -50,4 +50,31 @@ class AuthController extends Controller
             return response()->json(["error" => 'Internal server error'], 500);
         }
     }
+
+    /**
+     * Handle a user logout an revoke token
+     *
+     * @return \Illuminate\Http\JsonResponse JSON response with user data and access token, or an error message.
+     *
+     */
+    public function logout(): JsonResponse
+    {
+        try {
+
+            $user = Auth::user();
+
+            if ($user && $user->token()) {
+                $user->token()->revoke();
+            }
+            
+            return response()->json([
+                'message' => 'Successfully logged out'
+            ], 200);
+
+        } catch (\Throwable $e) {
+
+            Log::error("Logout error: " . $e->getMessage());
+            return response()->json(["error" => 'Internal server error'], 500);
+        }
+    }
 }
