@@ -1,61 +1,81 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🖥️ Proyecto Laravel 12
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Este proyecto está desarrollado con **Laravel 12**, sobre **PHP 8.3.20** y **MySQL 9.3.0**.  
+Se integran librerías externas y patrones de diseño para una arquitectura más escalable y mantenible.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 📦 Requisitos previos
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Asegúrate de tener instalado:
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- [PHP](https://www.php.net/) **8.3.20**
+- [Composer](https://getcomposer.org/) >= 2.x
+- [MySQL](https://dev.mysql.com/) **9.3.0**
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## ⚙️ Instalación del proyecto
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+Clona el repositorio y entra en la carpeta del proyecto:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+```bash
+git clone https://github.com/charlyrm14/ecommerce-lv.git
+cd mi-proyecto-laravel
+```
+## Instalar dependencias
+```bash
+composer install
+```
 
-## Laravel Sponsors
+## Archivo de entorno
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Ejecutar migraciones
+```bash
+php artisan migrate
+```
 
-### Premium Partners
+## Levantar el servidor de desarrollo
+```bash
+php artisan serve
+```
+🧰 Librerías externas utilizadas
+🔹 Laravel Passport
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+Gestión de autenticación OAuth2 y JWT tokens.
+Instalación básica:
 
-## Contributing
+```bash
+php artisan install:api --passport
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Patrones de diseño implementados
 
-## Code of Conduct
+Este proyecto implementa los siguientes patrones de diseño:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Strategy
 
-## Security Vulnerabilities
+Se usa para manejar el guardado de archivos en el servidor aplicando diferentes lógicas según el tipo de archivo:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+- Imágenes → Se generan distintas versiones (ejemplo: original, thumbnail, tamaños adaptados).
+- Videos → Se planea soportar distintas resoluciones y conversiones.
+- Otros archivos → Se podrán manejar reglas personalizadas en el futuro.
 
-## License
+Esto permite encapsular cada lógica de procesamiento de archivos en estrategias independientes, manteniendo el código limpio y flexible.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Observer
+
+- Se utiliza para escuchar eventos de los modelos y reaccionar automáticamente a ciertas acciones:
+- En los eventos created de Producto, Categoría y Marca se genera automáticamente un slug en base al nombre o título.
+
+Esto asegura consistencia en las URL amigables y evita lógica repetida en los controladores.
+
+🧑‍💻 Scripts disponibles
+
+- php artisan serve → Levanta el servidor en modo desarrollo.
+- php artisan migrate → Ejecuta migraciones.
+- php artisan db:seed → Carga datos iniciales.
