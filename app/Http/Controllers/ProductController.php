@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\{
-    Media,
     Product
 };
 use App\Http\Requests\{
@@ -11,14 +10,16 @@ use App\Http\Requests\{
     ProductStoreRequest,
     ProductUpdateRequest
 };
+use App\Resources\Products\{
+    NewProductResource,
+    ShowProductResource,
+    UpdateProductResource
+};
 use App\Services\ProductService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
-use App\Resources\Products\NewProductResource;
-use App\Resources\Products\ShowProductResource;
-use App\Resources\Products\UpdateProductResource;
-
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
@@ -34,8 +35,16 @@ class ProductController extends Controller
     public function index(ProductIndexRequest $request): JsonResponse
     {
         try {
+
+            $user = Auth::guard('api')->user();
             
-            $query = Product::query()->where('status', 1);
+            $this->authorize('viewAny', Product::class);
+
+            $query = Product::query();
+
+            if (!$user || $user->role === 'customer') {
+                $query->where('status', 1);
+            }
 
             if ($request->filled('names')) {
                 $names = explode(',', $request->query('names'));
@@ -47,14 +56,13 @@ class ProductController extends Controller
             }
 
             $products = $query->with(['files' => function($q) {
-                    $q->where('is_main', 1);
-                }
-            ])->paginate(15);
+                $q->where('is_main', 1);
+            }])->paginate(15);
 
             if ($products->isEmpty()) {
                 return response()->json(['message' => 'No results found'], 404);
             }
-
+            
             return response()->json([
                 'data' => $products
             ], 200);
