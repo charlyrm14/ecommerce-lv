@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\{
+    AuthController,
     BrandController,
     CartController,
     CategoryController,
@@ -10,6 +11,10 @@ use App\Http\Controllers\{
 };
 
 Route::prefix('v1/')->group(function () {
+    
+    Route::prefix('auth/')->controller(AuthController::class)->group(function () {
+        Route::post('login', 'login');
+    });
 
     Route::prefix('categories/')->controller(CategoryController::class)->group(function () {
         Route::get('', 'index');
